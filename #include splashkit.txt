@@ -1,0 +1,77 @@
+
+Result Size: 1514 x 1078
+​
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dragon Ball Anime Characters</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        h1 {color:orange; font-size: 24px;}
+    </style>
+</head>
+<body>
+    <h1>Dragon Ball Super Universe Characters</h1>
+​
+    <img src="https://wallpaperaccess.com/full/2537272.jpg" alt="Dragon Ball Supers" width="800" height="750">
+    
+    <h2>Character Information</h2>
+    <table style="border: 6px solid rgb(207, 197, 121);" >
+        <tr>
+            <th>Character</th>
+            <th>Destruction Level</th>
+            <th>Age</th>
+            <th>Universe</th>
+        </tr>
+        <tr>
+            <td style="color: purple;">Goku</td>
+            <td style="color: maroon;">1 Nonillion</td>
+            <td style="color: red;">44</td>
+            <td style="color: green;">7</td>
+        </tr>
+        <tr>
+            <td style="color: purple;">Jiren</td>
+            <td style="color: maroon;">12.5 Septillion</td>
+            <td style="color: red;">780</td>
+            <td style="color: green;">11</td>r
+        </tr>
+        <tr>
+            <td style="color: purple;">Frieza</td>
+            <td style="color: maroon;">100 Quintillion</td>
+            <td style="color: red;">47</td>
+            <td style="color: green;">8</td>
+        </tr>
+        <tr>
+            <td style="color: purple;">Lord Beerus</td>
+            <td style="color: maroon;">9.5 Sextillion</td>
+            <td style="color: red;">Millennia</td>
+            <td style="color: green;">7</td>
+        </tr>
+        <tr>
+            <td style="color: purple;">Vegeta</td>
+            <td style="color: maroon;">9.5 Sextillion</td>
+            <td style="color: red;">48</td>
+            <td style="color: green;">7</td>
+        </tr>
+    </table>
+    
+    <h2>Character Information Form</h2>
+    <form action="#" method="post">
+        <label for="character">Character Name:</label>
+        <input type="text" id="character" name="character" required><br><br>
+        
+        <label for="destruction">Destruction Level:</label>
+        <input type="text" id="destruction" name="destruction" required><br><br>
+        
+        <label for="age">Age:</label>
+        <input type="text" id="age" name="age" required><br><br>
+        
+        <label for="universe">Universe:</label>
+        <input type="text" id="universe" name="universe" required><br><br>
+        
+        <input type="submit" value="Add DBS Character">
+    </form>
+</body>
+</html>
+​
+
