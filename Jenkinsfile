@@ -2,19 +2,22 @@ pipeline {
     agent any
 
     tools {
-        maven 'Maven' // Use the Maven tool configured in Jenkins
+        // Use the Maven tool configured in Jenkins. Ensure the name matches the one you set up in Jenkins.
+        maven 'Maven Integration with Jenkins'
     }
 
     environment {
-        SONARQUBE_SERVER = 'SonarQube' // Name of the SonarQube server configured in Jenkins
+        // Name of the SonarQube server configured in Jenkins.
+        SONARQUBE_SERVER = 'SonarQube'
     }
 
     stages {
         stage('Build') {
             steps {
                 script {
+                    // Building the project using Maven. Adjust the command according to your project's build command.
                     echo 'Building the project...'
-                    sh 'mvn clean install' // Adjust according to your project's build command
+                    sh 'mvn clean install'
                 }
             }
         }
@@ -22,8 +25,9 @@ pipeline {
         stage('Test') {
             steps {
                 script {
+                    // Running tests using Maven. Adjust the command according to your project's test command.
                     echo 'Running tests...'
-                    sh 'mvn test' // Adjust according to your project's test command
+                    sh 'mvn test'
                 }
             }
         }
@@ -31,9 +35,11 @@ pipeline {
         stage('Code Quality Analysis') {
             steps {
                 script {
+                    // Running code quality analysis using SonarQube. The 'withSonarQubeEnv' ensures the SonarQube environment is available for this step.
                     echo 'Running code quality analysis...'
                     withSonarQubeEnv('SonarQube') {
-                        sh 'mvn sonar:sonar' // Adjust according to your project's SonarQube command
+                        // The Maven command for SonarQube analysis. Adjust according to your project's SonarQube command.
+                        sh 'mvn sonar:sonar'
                     }
                 }
             }
@@ -42,8 +48,8 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
+                    // Deploying the application to the test environment. This example uses Docker Compose.
                     echo 'Deploying to test environment...'
-                    // Example: Deploying using Docker Compose
                     sh 'docker-compose up -d'
                 }
             }
@@ -52,8 +58,9 @@ pipeline {
         stage('Release') {
             steps {
                 script {
+                    // Releasing the application to production. This example uses AWS CodeDeploy.
                     echo 'Releasing to production...'
-                    // Example: Using AWS CodeDeploy
+                    // Uncomment and adjust the command below according to your project's deployment requirements.
                     // sh 'aws deploy create-deployment --application-name MyApp --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name MyDeploymentGroup --description "My deployment" --github-location repository=Samraat29/Jenkins6.2HD,commitId=main'
                 }
             }
@@ -62,9 +69,10 @@ pipeline {
         stage('Monitoring and Alerting') {
             steps {
                 script {
+                    // Setting up monitoring and alerting for the application. This example uses Datadog.
                     echo 'Setting up monitoring and alerting...'
-                    // Example: Integrating with Datadog
-                    sh 'datadog-agent start'
+                    // Uncomment and adjust the command below according to your monitoring tool.
+                    // sh 'datadog-agent start'
                 }
             }
         }
@@ -72,9 +80,11 @@ pipeline {
 
     post {
         success {
+            // This message is displayed when the pipeline completes successfully.
             echo 'Pipeline completed successfully!'
         }
         failure {
+            // This message is displayed when the pipeline fails.
             echo 'Pipeline failed!'
         }
     }
