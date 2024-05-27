@@ -1,14 +1,20 @@
 pipeline {
     agent any
 
+    tools {
+        maven 'Maven' // Use the Maven tool configured in Jenkins
+    }
+
+    environment {
+        SONARQUBE_SERVER = 'SonarQube' // Name of the SonarQube server configured in Jenkins
+    }
+
     stages {
         stage('Build') {
             steps {
                 script {
                     echo 'Building the project...'
-                    // Add build commands if necessary
-                    // For example, for a JavaScript project with npm:
-                    // sh 'npm install'
+                    sh 'mvn clean install' // Adjust according to your project's build command
                 }
             }
         }
@@ -17,9 +23,7 @@ pipeline {
             steps {
                 script {
                     echo 'Running tests...'
-                    // Add commands to run tests if you have any
-                    // For example, for a JavaScript project with npm:
-                    // sh 'npm test'
+                    sh 'mvn test' // Adjust according to your project's test command
                 }
             }
         }
@@ -28,9 +32,9 @@ pipeline {
             steps {
                 script {
                     echo 'Running code quality analysis...'
-                    // Add code quality analysis commands
-                    // For example, for a JavaScript project with ESLint:
-                    // sh 'npm run lint'
+                    withSonarQubeEnv('SonarQube') {
+                        sh 'mvn sonar:sonar' // Adjust according to your project's SonarQube command
+                    }
                 }
             }
         }
@@ -39,9 +43,8 @@ pipeline {
             steps {
                 script {
                     echo 'Deploying to test environment...'
-                    // Add commands to deploy your project
-                    // Example: copying files to a web server or S3 bucket
-                    // sh 'scp -r . user@server:/path/to/deploy'
+                    // Example: Deploying using Docker Compose
+                    sh 'docker-compose up -d'
                 }
             }
         }
@@ -50,8 +53,8 @@ pipeline {
             steps {
                 script {
                     echo 'Releasing to production...'
-                    // Add commands to deploy to production
-                    // Example: copying files to a production server
+                    // Example: Using AWS CodeDeploy
+                    // sh 'aws deploy create-deployment --application-name MyApp --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name MyDeploymentGroup --description "My deployment" --github-location repository=Samraat29/Jenkins6.2HD,commitId=main'
                 }
             }
         }
@@ -60,10 +63,19 @@ pipeline {
             steps {
                 script {
                     echo 'Setting up monitoring and alerting...'
-                    // Set up monitoring tools if needed
-                    // Example: integrating with Datadog or New Relic
+                    // Example: Integrating with Datadog
+                    sh 'datadog-agent start'
                 }
             }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed!'
         }
     }
 }
