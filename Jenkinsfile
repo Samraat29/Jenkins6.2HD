@@ -2,12 +2,12 @@ pipeline {
     agent any
 
     tools {
-        maven 'Maven Integration with Jenkins' // Use the Maven tool configured in Jenkins
-        jdk 'JDK' // Use the JDK tool configured in Jenkins
+        maven 'Maven Integration with Jenkins' // Ensure Maven tool is correctly configured
+        jdk 'JDK' // Ensure JDK tool is correctly configured
     }
 
     environment {
-        SONARQUBE_SERVER = 'SonarQube' // Set the SonarQube server name
+        SONARQUBE_SERVER = 'SonarQube' // Ensure SonarQube server is correctly configured
     }
 
     stages {
