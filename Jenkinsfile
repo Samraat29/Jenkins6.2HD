@@ -44,10 +44,10 @@ pipeline {
             steps {
                 script {
                     echo 'Deploying to test environment...'
-                    withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials-id', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                        bat 'docker login -u %DOCKER_USER% -p %DOCKER_PASS%'
+                    withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials-id', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+                        bat 'docker login -u %DOCKER_USERNAME% -p %DOCKER_PASSWORD%'
+                        bat 'docker-compose up -d'
                     }
-                    bat 'docker-compose up -d'
                 }
             }
         }
@@ -56,8 +56,7 @@ pipeline {
             steps {
                 script {
                     echo 'Releasing to production...'
-                    // Uncomment and modify the following line as needed
-                    // bat 'aws deploy create-deployment --application-name MyApp --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name MyDeploymentGroup --description "My deployment" --github-location repository=YourUsername/YourRepository,commitId=main'
+                    // Add your release script or command here
                 }
             }
         }
@@ -66,8 +65,7 @@ pipeline {
             steps {
                 script {
                     echo 'Setting up monitoring and alerting...'
-                    // Uncomment and modify the following line as needed
-                    // bat 'datadog-agent start'
+                    // Add your monitoring and alerting setup script or command here
                 }
             }
         }
