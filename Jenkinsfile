@@ -3,6 +3,7 @@ pipeline {
 
     tools {
         maven 'Maven Integration with Jenkins' // Use the Maven tool configured in Jenkins
+        jdk 'JDK' // Use the JDK tool configured in Jenkins
     }
 
     environment {
