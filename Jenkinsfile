@@ -2,12 +2,12 @@ pipeline {
     agent any
 
     tools {
-        maven 'Maven Integration with Jenkins'
-        jdk 'JDK'
+        maven 'Maven Integration with Jenkins' // Ensure Maven tool is correctly configured
+        jdk 'JDK' // Ensure JDK tool is correctly configured
     }
 
     environment {
-        SONARQUBE_SERVER = 'SonarQube'
+        SONARQUBE_SERVER = 'SonarQube' // Ensure SonarQube server is correctly configured
     }
 
     stages {
@@ -15,7 +15,7 @@ pipeline {
             steps {
                 script {
                     echo 'Building the project...'
-                    bat 'mvn clean install'
+                    bat 'mvn clean install' // Build the project
                 }
             }
         }
@@ -24,7 +24,7 @@ pipeline {
             steps {
                 script {
                     echo 'Running tests...'
-                    bat 'mvn test'
+                    bat 'mvn test' // Run tests
                 }
             }
         }
@@ -34,7 +34,7 @@ pipeline {
                 script {
                     echo 'Running code quality analysis...'
                     withSonarQubeEnv('SonarQube') {
-                        bat 'mvn sonar:sonar'
+                        bat 'mvn sonar:sonar' // Run code quality analysis
                     }
                 }
             }
@@ -44,9 +44,9 @@ pipeline {
             steps {
                 script {
                     echo 'Deploying to test environment...'
-                    withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials-id', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+                    withCredentials([usernamePassword(credentialsId: 'My-Docker-Id', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
                         bat 'docker login -u %DOCKER_USERNAME% -p %DOCKER_PASSWORD%'
-                        bat 'docker-compose up -d'
+                        bat 'docker-compose up -d' // Deploy the application
                     }
                 }
             }
@@ -56,7 +56,8 @@ pipeline {
             steps {
                 script {
                     echo 'Releasing to production...'
-                    // Add your release script or command here
+                    // Uncomment and modify the following line as needed
+                    // bat 'aws deploy create-deployment --application-name MyApp --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name MyDeploymentGroup --description "My deployment" --github-location repository=YourUsername/YourRepository,commitId=main'
                 }
             }
         }
@@ -65,7 +66,8 @@ pipeline {
             steps {
                 script {
                     echo 'Setting up monitoring and alerting...'
-                    // Add your monitoring and alerting setup script or command here
+                    // Uncomment and modify the following line as needed
+                    // bat 'datadog-agent start'
                 }
             }
         }
@@ -73,10 +75,10 @@ pipeline {
 
     post {
         success {
-            echo 'Pipeline completed successfully!'
+            echo 'Pipeline completed successfully!' // Message on success
         }
         failure {
-            echo 'Pipeline failed!'
+            echo 'Pipeline failed!' // Message on failure
         }
     }
 }
