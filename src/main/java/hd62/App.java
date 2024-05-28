@@ -1,4 +1,4 @@
-package 6.2hd;
+package hd62;
 
 /**
  * Hello world!
