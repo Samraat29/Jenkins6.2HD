@@ -17,7 +17,9 @@ pipeline {
                 script {
                     // Building the project using Maven. Adjust the command according to your project's build command.
                     echo 'Building the project...'
-                    bat 'mvn clean install'
+                    dir('Jenkins6.2HD') { // Ensure this matches the relative path to your pom.xml
+                        bat 'mvn clean install'
+                    }
                 }
             }
         }
@@ -27,7 +29,9 @@ pipeline {
                 script {
                     // Running tests using Maven. Adjust the command according to your project's test command.
                     echo 'Running tests...'
-                    bat 'mvn test'
+                    dir('Jenkins6.2HD') { // Ensure this matches the relative path to your pom.xml
+                        bat 'mvn test'
+                    }
                 }
             }
         }
@@ -37,9 +41,11 @@ pipeline {
                 script {
                     // Running code quality analysis using SonarQube. The 'withSonarQubeEnv' ensures the SonarQube environment is available for this step.
                     echo 'Running code quality analysis...'
-                    withSonarQubeEnv('SonarQube') { // Ensure 'SonarQube' matches the name in Jenkins configuration
-                        // The Maven command for SonarQube analysis. Adjust according to your project's SonarQube command.
-                        bat 'mvn sonar:sonar'
+                    dir('Jenkins6.2HD') { // Ensure this matches the relative path to your pom.xml
+                        withSonarQubeEnv('SonarQube') { // Ensure 'SonarQube' matches the name in Jenkins configuration
+                            // The Maven command for SonarQube analysis. Adjust according to your project's SonarQube command.
+                            bat 'mvn sonar:sonar'
+                        }
                     }
                 }
             }
@@ -50,7 +56,9 @@ pipeline {
                 script {
                     // Deploying the application to the test environment. This example uses Docker Compose.
                     echo 'Deploying to test environment...'
-                    bat 'docker-compose up -d'
+                    dir('Jenkins6.2HD') { // Ensure this matches the relative path to your docker-compose.yml
+                        bat 'docker-compose up -d'
+                    }
                 }
             }
         }
@@ -61,7 +69,9 @@ pipeline {
                     // Releasing the application to production. This example uses AWS CodeDeploy.
                     echo 'Releasing to production...'
                     // Uncomment and adjust the command below according to your project's deployment requirements.
-                    // bat 'aws deploy create-deployment --application-name MyApp --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name MyDeploymentGroup --description "My deployment" --github-location repository=Samraat29/Jenkins6.2HD,commitId=main'
+                    // dir('Jenkins6.2HD') { // Ensure this matches the relative path if necessary
+                    //     bat 'aws deploy create-deployment --application-name MyApp --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name MyDeploymentGroup --description "My deployment" --github-location repository=Samraat29/Jenkins6.2HD,commitId=main'
+                    // }
                 }
             }
         }
@@ -72,7 +82,9 @@ pipeline {
                     // Setting up monitoring and alerting for the application. This example uses Datadog.
                     echo 'Setting up monitoring and alerting...'
                     // Uncomment and adjust the command below according to your monitoring tool.
-                    // bat 'datadog-agent start'
+                    // dir('Jenkins6.2HD') { // Ensure this matches the relative path if necessary
+                    //     bat 'datadog-agent start'
+                    // }
                 }
             }
         }
