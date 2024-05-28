@@ -2,12 +2,12 @@ pipeline {
     agent any
 
     tools {
-        maven 'Maven Integration with Jenkins' // Ensure Maven tool is correctly configured
-        jdk 'JDK' // Ensure JDK tool is correctly configured
+        maven 'Maven Integration with Jenkins'
+        jdk 'JDK'
     }
 
     environment {
-        SONARQUBE_SERVER = 'SonarQube' // Ensure SonarQube server is correctly configured
+        SONARQUBE_SERVER = 'SonarQube'
     }
 
     stages {
@@ -15,7 +15,7 @@ pipeline {
             steps {
                 script {
                     echo 'Building the project...'
-                    bat 'mvn clean install' // Build the project
+                    bat 'mvn clean install'
                 }
             }
         }
@@ -24,7 +24,7 @@ pipeline {
             steps {
                 script {
                     echo 'Running tests...'
-                    bat 'mvn test' // Run tests
+                    bat 'mvn test'
                 }
             }
         }
@@ -34,7 +34,7 @@ pipeline {
                 script {
                     echo 'Running code quality analysis...'
                     withSonarQubeEnv('SonarQube') {
-                        bat 'mvn sonar:sonar' // Run code quality analysis
+                        bat 'mvn sonar:sonar'
                     }
                 }
             }
@@ -44,7 +44,10 @@ pipeline {
             steps {
                 script {
                     echo 'Deploying to test environment...'
-                    bat 'docker-compose up -d' // Deploy the application
+                    withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials-id', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                        bat 'docker login -u %DOCKER_USER% -p %DOCKER_PASS%'
+                    }
+                    bat 'docker-compose up -d'
                 }
             }
         }
@@ -72,10 +75,10 @@ pipeline {
 
     post {
         success {
-            echo 'Pipeline completed successfully!' // Message on success
+            echo 'Pipeline completed successfully!'
         }
         failure {
-            echo 'Pipeline failed!' // Message on failure
+            echo 'Pipeline failed!'
         }
     }
 }
