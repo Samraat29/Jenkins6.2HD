@@ -2,13 +2,13 @@ pipeline {
     agent any
 
     tools {
-        // Use the Maven tool configured in Jenkins. Ensure the name matches the one you set up in Jenkins.
-        maven 'Maven Integration with Jenkins'
+        // Use the Maven tool configured in Jenkins. Ensure the name matches exactly as configured in Jenkins.
+        maven 'Mavern Integration with Jenkins'
     }
 
     environment {
         // Name of the SonarQube server configured in Jenkins.
-        SONARQUBE_SERVER = 'SonarQube'
+        SONARQUBE_SERVER = 'SonarQube' // Replace 'SonarQube' with the exact name from the Jenkins configuration if different
     }
 
     stages {
@@ -17,7 +17,7 @@ pipeline {
                 script {
                     // Building the project using Maven. Adjust the command according to your project's build command.
                     echo 'Building the project...'
-                    sh 'mvn clean install'
+                    bat 'mvn clean install'
                 }
             }
         }
@@ -27,7 +27,7 @@ pipeline {
                 script {
                     // Running tests using Maven. Adjust the command according to your project's test command.
                     echo 'Running tests...'
-                    sh 'mvn test'
+                    bat 'mvn test'
                 }
             }
         }
@@ -37,9 +37,9 @@ pipeline {
                 script {
                     // Running code quality analysis using SonarQube. The 'withSonarQubeEnv' ensures the SonarQube environment is available for this step.
                     echo 'Running code quality analysis...'
-                    withSonarQubeEnv('SonarQube') {
+                    withSonarQubeEnv('SonarQube') { // Ensure 'SonarQube' matches the name in Jenkins configuration
                         // The Maven command for SonarQube analysis. Adjust according to your project's SonarQube command.
-                        sh 'mvn sonar:sonar'
+                        bat 'mvn sonar:sonar'
                     }
                 }
             }
@@ -50,7 +50,7 @@ pipeline {
                 script {
                     // Deploying the application to the test environment. This example uses Docker Compose.
                     echo 'Deploying to test environment...'
-                    sh 'docker-compose up -d'
+                    bat 'docker-compose up -d'
                 }
             }
         }
@@ -61,7 +61,7 @@ pipeline {
                     // Releasing the application to production. This example uses AWS CodeDeploy.
                     echo 'Releasing to production...'
                     // Uncomment and adjust the command below according to your project's deployment requirements.
-                    // sh 'aws deploy create-deployment --application-name MyApp --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name MyDeploymentGroup --description "My deployment" --github-location repository=Samraat29/Jenkins6.2HD,commitId=main'
+                    // bat 'aws deploy create-deployment --application-name MyApp --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name MyDeploymentGroup --description "My deployment" --github-location repository=Samraat29/Jenkins6.2HD,commitId=main'
                 }
             }
         }
@@ -72,7 +72,7 @@ pipeline {
                     // Setting up monitoring and alerting for the application. This example uses Datadog.
                     echo 'Setting up monitoring and alerting...'
                     // Uncomment and adjust the command below according to your monitoring tool.
-                    // sh 'datadog-agent start'
+                    // bat 'datadog-agent start'
                 }
             }
         }
