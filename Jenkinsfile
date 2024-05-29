@@ -2,20 +2,26 @@ pipeline {
     agent any
 
     tools {
-        maven 'Maven Integration with Jenkins' // Ensure Maven tool is correctly configured
-        jdk 'JDK' // Ensure JDK tool is correctly configured
+        maven 'Maven Integration with Jenkins'
+        jdk 'JDK'
     }
 
     environment {
-        SONARQUBE_SERVER = 'SonarQube' // Ensure SonarQube server is correctly configured
+        SONARQUBE_SERVER = 'SonarQube'
     }
 
     stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
         stage('Build') {
             steps {
                 script {
                     echo 'Building the project...'
-                    bat 'mvn clean install' // Build the project
+                    bat 'mvn clean install'
                 }
             }
         }
@@ -24,7 +30,7 @@ pipeline {
             steps {
                 script {
                     echo 'Running tests...'
-                    bat 'mvn test' // Run tests
+                    bat 'mvn test'
                 }
             }
         }
@@ -34,7 +40,7 @@ pipeline {
                 script {
                     echo 'Running code quality analysis...'
                     withSonarQubeEnv('SonarQube') {
-                        bat 'mvn sonar:sonar' // Run code quality analysis
+                        bat 'mvn sonar:sonar'
                     }
                 }
             }
@@ -46,7 +52,7 @@ pipeline {
                     echo 'Deploying to test environment...'
                     withCredentials([usernamePassword(credentialsId: 'My-Docker-Id', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
                         bat 'docker login -u %DOCKER_USERNAME% -p %DOCKER_PASSWORD%'
-                        bat 'docker-compose up -d' // Deploy the application
+                        bat 'docker-compose up -d'
                     }
                 }
             }
@@ -56,8 +62,6 @@ pipeline {
             steps {
                 script {
                     echo 'Releasing to production...'
-                    // Uncomment and modify the following line as needed
-                    // bat 'aws deploy create-deployment --application-name MyApp --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name MyDeploymentGroup --description "My deployment" --github-location repository=YourUsername/YourRepository,commitId=main'
                 }
             }
         }
@@ -66,8 +70,6 @@ pipeline {
             steps {
                 script {
                     echo 'Setting up monitoring and alerting...'
-                    // Uncomment and modify the following line as needed
-                    // bat 'datadog-agent start'
                 }
             }
         }
@@ -75,10 +77,10 @@ pipeline {
 
     post {
         success {
-            echo 'Pipeline completed successfully!' // Message on success
+            echo 'Pipeline completed successfully!'
         }
         failure {
-            echo 'Pipeline failed!' // Message on failure
+            echo 'Pipeline failed!'
         }
     }
 }
