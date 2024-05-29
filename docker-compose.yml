@@ -1,11 +1,15 @@
-version: '3'
+version: '3.7'
+
 services:
   web:
-    image: my-web-app:latest
+    image: my-web-app:latest # Make sure this image exists in your Docker registry
     ports:
-      - "8080:80"
+      - "5000:5000"
+    depends_on:
+      - db
+
   db:
-    image: mysql:latest
+    image: mysql:5.7 # This is a public image, so it should work without issues
     environment:
       MYSQL_ROOT_PASSWORD: example
       MYSQL_DATABASE: exampledb
