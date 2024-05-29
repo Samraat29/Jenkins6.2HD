@@ -1,15 +1,10 @@
-version: '3.7'
-
+version: '3.8'
 services:
   web:
-    image: my-web-app:latest # Make sure this image exists in your Docker registry
+    image: samboi/my-web-app:latest
     ports:
-      - "5000:5000"
-    depends_on:
-      - db
-
+      - "80:80"
   db:
-    image: mysql:5.7 # This is a public image, so it should work without issues
+    image: mysql:5.7
     environment:
       MYSQL_ROOT_PASSWORD: example
-      MYSQL_DATABASE: exampledb
