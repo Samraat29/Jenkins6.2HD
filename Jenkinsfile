@@ -52,8 +52,21 @@ pipeline {
                     echo 'Deploying to test environment...'
                     withCredentials([usernamePassword(credentialsId: 'My-Docker-Id', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
                         bat 'docker login -u %DOCKER_USERNAME% -p %DOCKER_PASSWORD%'
+                        bat 'docker-compose down'
                         bat 'docker-compose up -d'
                     }
+                }
+            }
+        }
+
+        stage('Generate Turnitin Proof') {
+            steps {
+                script {
+                    echo 'Generating proof for Turnitin submission...'
+                    // Example command to generate a text file with pipeline details
+                    bat 'echo Pipeline completed successfully! > proof.txt'
+                    // If you have Pandoc installed, you can generate a PDF
+                    // bat 'pandoc -o proof.pdf proof.txt'
                 }
             }
         }
