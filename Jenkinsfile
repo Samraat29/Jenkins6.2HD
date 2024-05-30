@@ -2,18 +2,20 @@ pipeline {
     agent any
 
     tools {
+        // Tools required for the pipeline
         maven 'Maven Integration with Jenkins'
         jdk 'JDK'
     }
 
     environment {
+        // SonarQube server environment variable
         SONARQUBE_SERVER = 'SonarQube'
     }
 
     stages {
         stage('Checkout') {
             steps {
-                // Checkout code from the SCM (Source Code Management)
+                // Checkout the source code from the repository
                 checkout scm
             }
         }
@@ -21,8 +23,8 @@ pipeline {
         stage('Build') {
             steps {
                 script {
+                    // Building the project using Maven
                     echo 'Building the project...'
-                    // Run Maven clean install to build the project
                     bat 'mvn clean install'
                 }
             }
@@ -31,8 +33,8 @@ pipeline {
         stage('Test') {
             steps {
                 script {
+                    // Running the tests using Maven
                     echo 'Running tests...'
-                    // Run Maven test to execute the tests
                     bat 'mvn test'
                 }
             }
@@ -41,9 +43,9 @@ pipeline {
         stage('Wait for SonarQube') {
             steps {
                 script {
+                    // Waiting for SonarQube to be ready
                     echo 'Waiting for SonarQube to be ready...'
-                    // Wait for a certain period to ensure SonarQube is up
-                    sleep time: 30, unit: 'SECONDS' // Adjust the time as needed
+                    sleep 30
                 }
             }
         }
@@ -51,10 +53,12 @@ pipeline {
         stage('Code Quality Analysis') {
             steps {
                 script {
+                    // Running code quality analysis using SonarQube
                     echo 'Running code quality analysis...'
-                    // Run SonarQube analysis
                     withSonarQubeEnv('SonarQube') {
-                        bat 'mvn sonar:sonar'
+                        withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONAR_TOKEN')]) {
+                            bat "mvn sonar:sonar -Dsonar.login=${SONAR_TOKEN}"
+                        }
                     }
                 }
             }
@@ -64,24 +68,10 @@ pipeline {
             steps {
                 script {
                     echo 'Deploying to test environment...'
-                    // Use Docker credentials to login and deploy using docker-compose
                     withCredentials([usernamePassword(credentialsId: 'My-Docker-Id', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
                         bat 'docker login -u %DOCKER_USERNAME% -p %DOCKER_PASSWORD%'
-                        bat 'docker-compose down' // Stop and remove existing containers
-                        bat 'docker-compose up -d' // Start containers in detached mode
+                        bat 'docker-compose up -d'
                     }
-                }
-            }
-        }
-
-        stage('Generate Turnitin Proof') {
-            steps {
-                script {
-                    echo 'Generating proof for Turnitin submission...'
-                    // Example command to generate a text file with pipeline details
-                    bat 'echo Pipeline completed successfully! > proof.txt'
-                    // If you have Pandoc installed, you can generate a PDF
-                    // bat 'pandoc -o proof.pdf proof.txt'
                 }
             }
         }
@@ -90,7 +80,7 @@ pipeline {
             steps {
                 script {
                     echo 'Releasing to production...'
-                    // Add steps for releasing to production if needed
+                    // Additional release steps can be added here
                 }
             }
         }
@@ -99,7 +89,7 @@ pipeline {
             steps {
                 script {
                     echo 'Setting up monitoring and alerting...'
-                    // Add steps for setting up monitoring and alerting if needed
+                    // Additional monitoring and alerting steps can be added here
                 }
             }
         }
