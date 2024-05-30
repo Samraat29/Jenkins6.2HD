@@ -13,6 +13,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
+                // Checkout code from the SCM (Source Code Management)
                 checkout scm
             }
         }
@@ -21,6 +22,7 @@ pipeline {
             steps {
                 script {
                     echo 'Building the project...'
+                    // Run Maven clean install to build the project
                     bat 'mvn clean install'
                 }
             }
@@ -30,7 +32,18 @@ pipeline {
             steps {
                 script {
                     echo 'Running tests...'
+                    // Run Maven test to execute the tests
                     bat 'mvn test'
+                }
+            }
+        }
+
+        stage('Wait for SonarQube') {
+            steps {
+                script {
+                    echo 'Waiting for SonarQube to be ready...'
+                    // Wait for a certain period to ensure SonarQube is up
+                    sleep time: 30, unit: 'SECONDS' // Adjust the time as needed
                 }
             }
         }
@@ -39,6 +52,7 @@ pipeline {
             steps {
                 script {
                     echo 'Running code quality analysis...'
+                    // Run SonarQube analysis
                     withSonarQubeEnv('SonarQube') {
                         bat 'mvn sonar:sonar'
                     }
@@ -50,10 +64,11 @@ pipeline {
             steps {
                 script {
                     echo 'Deploying to test environment...'
+                    // Use Docker credentials to login and deploy using docker-compose
                     withCredentials([usernamePassword(credentialsId: 'My-Docker-Id', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
                         bat 'docker login -u %DOCKER_USERNAME% -p %DOCKER_PASSWORD%'
-                        bat 'docker-compose down'
-                        bat 'docker-compose up -d'
+                        bat 'docker-compose down' // Stop and remove existing containers
+                        bat 'docker-compose up -d' // Start containers in detached mode
                     }
                 }
             }
@@ -75,6 +90,7 @@ pipeline {
             steps {
                 script {
                     echo 'Releasing to production...'
+                    // Add steps for releasing to production if needed
                 }
             }
         }
@@ -83,6 +99,7 @@ pipeline {
             steps {
                 script {
                     echo 'Setting up monitoring and alerting...'
+                    // Add steps for setting up monitoring and alerting if needed
                 }
             }
         }
