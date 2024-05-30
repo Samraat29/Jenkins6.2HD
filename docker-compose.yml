@@ -3,7 +3,7 @@ services:
   web:
     image: samboi/my-web-app:latest
     ports:
-      - "8081:8081" # Ensure the container's internal port matches the server.js port
+      - "8082:8081" # Change the host port to 8082, keep the container port as 8081
   db:
     image: mysql:5.7
     environment:
