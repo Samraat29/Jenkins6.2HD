@@ -3,7 +3,7 @@ services:
   web:
     image: samboi/my-web-app:latest
     ports:
-      - "80:80"
+      - "8080:8080" # Updated ports
   db:
     image: mysql:5.7
     environment:
