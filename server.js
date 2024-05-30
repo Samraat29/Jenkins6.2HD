@@ -1,7 +1,7 @@
 const http = require('http');
 
 const hostname = '0.0.0.0';
-const port = 8081; // Change this to 8081
+const port = 8081; // Ensure this is 8081
 
 const server = http.createServer((req, res) => {
   res.statusCode = 200;
@@ -12,3 +12,4 @@ const server = http.createServer((req, res) => {
 server.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
 });
+
